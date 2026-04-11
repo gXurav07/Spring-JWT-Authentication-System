@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth/v1/")
@@ -58,16 +60,25 @@ public class AuthController
     }
 
     @PostMapping("refreshAccessToken")
-    public JwtResponseDTO refreshToken(@RequestBody RefreshAccessTokenRequestDTO refreshTokenRequestDTO){
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshAccessTokenRequestDTO refreshTokenRequestDTO){
         return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUserInfo)
-                .map(userInfo -> {
-                    String accessToken = jwtService.generateToken(userInfo.getUsername());
-                    return JwtResponseDTO.builder()
-                            .accessToken(accessToken)
-                            .token(refreshTokenRequestDTO.getToken()).build();
-                }).orElseThrow(() -> new RuntimeException("Refresh Token is not in DB..!!"));
+                .map(refreshToken -> {
+                    try {
+                        RefreshToken validRefreshToken = refreshTokenService.verifyExpiration(refreshToken);
+                        String accessToken = jwtService.generateToken(validRefreshToken.getUserInfo().getUsername());
+                        return ResponseEntity.ok(
+                                JwtResponseDTO.builder()
+                                        .accessToken(accessToken)
+                                        .token(refreshTokenRequestDTO.getToken())
+                                        .build()
+                        );
+                    } catch (RuntimeException exception) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(Map.of("message", exception.getMessage()));
+                    }
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "Refresh token not found")));
     }
 
 }

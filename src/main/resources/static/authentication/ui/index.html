@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication UI</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main class="layout">
+    <section class="panel">
+        <h1>Authentication UI</h1>
+        <p class="subtle">Use the service, inspect responses, and keep tokens in one place.</p>
+
+        <div class="stack">
+            <label class="field">
+                <span>Username</span>
+                <input id="username" type="text" placeholder="alice">
+            </label>
+
+            <label class="field">
+                <span>Password</span>
+                <input id="password" type="password" placeholder="password">
+            </label>
+        </div>
+
+        <div class="actions">
+            <button id="signup-btn" type="button">Sign Up</button>
+            <button id="login-btn" type="button">Log In</button>
+            <button id="logout-btn" type="button" class="secondary">Clear Tokens</button>
+        </div>
+        <div id="auth-result" class="result-box" aria-live="polite">
+            <p id="auth-result-status" class="result-status">No auth request has been made yet.</p>
+            <pre id="auth-result-body" class="result-body"></pre>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Tokens</h2>
+        <div class="stack">
+            <label class="field">
+                <span>Refresh Token</span>
+                <textarea id="refresh-token" rows="4" placeholder="Refresh token appears here"></textarea>
+            </label>
+        </div>
+
+        <p id="token-status" class="subtle token-status">Access token is not loaded.</p>
+
+        <div class="actions">
+            <button id="refresh-btn" type="button">Refresh Access Token</button>
+        </div>
+        <div id="refresh-result" class="result-box" aria-live="polite">
+            <p id="refresh-result-status" class="result-status">No refresh request has been made yet.</p>
+            <pre id="refresh-result-body" class="result-body"></pre>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Protected Endpoints</h2>
+        <div class="actions">
+            <button id="profile-btn" type="button">Get User Profile</button>
+            <button id="admin-btn" type="button">Get Admin Dashboard</button>
+        </div>
+        <div id="protected-result" class="result-box" aria-live="polite">
+            <p id="protected-result-status" class="result-status">No protected request has been made yet.</p>
+            <pre id="protected-result-body" class="result-body"></pre>
+        </div>
+    </section>
+
+    <section class="panel panel-wide">
+        <div class="panel-header">
+            <h2>Request Log</h2>
+            <button id="clear-log-btn" type="button" class="secondary">Clear Log</button>
+        </div>
+        <pre id="log-output" class="log" aria-live="polite"></pre>
+    </section>
+</main>
+
+<script src="./app.js"></script>
+</body>
+</html>

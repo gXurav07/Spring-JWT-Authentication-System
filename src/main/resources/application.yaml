@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: authentication
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/testdb
+    username: testuser
+    password: testpass123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: auth-notification-group
+
+server:
+  port: 8080
