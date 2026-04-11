@@ -7,4 +7,5 @@ import lombok.Getter;
 public class UserInfoDTO {
     private String username;
     private String password;
+    private String email;
 }

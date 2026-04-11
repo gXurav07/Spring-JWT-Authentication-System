@@ -1,11 +1,14 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
   application:
     name: authentication
 
   datasource:
-    url: jdbc:mysql://localhost:3306/testdb
-    username: testuser
-    password: testpass123
+    url: ${DB_URL:jdbc:mysql://localhost:3306/testdb}
+    username: ${DB_USERNAME:testuser}
+    password: ${DB_PASSWORD:testpass123}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -20,9 +23,28 @@ spring:
     property-naming-strategy: SNAKE_CASE
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
-      group-id: auth-notification-group
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:auth-notification-group}
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: flase
+          starttls:
+            enable: false
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
+
+app:
+  mail:
+    from: "gmblaster@gmail.com"
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}

@@ -45,9 +45,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(userInfoDTO.getPassword());
         userRepository.save(new UserInfo(null,
                 userInfoDTO.getUsername(),
+                userInfoDTO.getEmail(),
                 encodedPassword,
                 Set.of(defaultRole)));
-        authNotificationProducer.sendSignupNotification(userInfoDTO.getUsername(), null);
+        authNotificationProducer.sendSignupNotification(userInfoDTO.getUsername(), userInfoDTO.getEmail());
         return true;
     }
 
@@ -55,4 +56,3 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return  userRepository.findByUsername(username) != null;
     }
 }
-

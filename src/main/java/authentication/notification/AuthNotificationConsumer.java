@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthNotificationConsumer {
 
+    private final EmailService emailService;
 
     @KafkaListener(topics = KafkaProducerConfig.AUTH_NOTIFICATION_TOPIC, groupId = "auth-notification-group")
     public void consume(AuthNotificationEvent event) {
@@ -35,5 +36,17 @@ public class AuthNotificationConsumer {
         }
 
         System.out.println(subject + "\n\n" + body);
+
+        if (event.getEmail() == null || event.getEmail().isBlank()) {
+            log.warn("Skipping mail send because recipient email is missing for event: {}", event);
+            return;
+        }
+
+        try {
+            emailService.sendSimpleEmail(event.getEmail(), subject, body);
+        } catch (Exception e) {
+            System.out.println("Failed to send mail!\n" + e);
+        }
+
     }
 }

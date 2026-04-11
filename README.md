@@ -1,4 +1,4 @@
-# Backend Mastery
+# Role-Based JWT Authentication Service
 
 A backend learning project centered on a **Spring Boot JWT authentication system**, with smaller demos for **Spring AOP** and **Java Dynamic Proxies**.
 

@@ -1,7 +1,6 @@
 package authentication.controller;
 
 import authentication.entities.RefreshToken;
-import authentication.model.AuthRequestDTO;
 import authentication.model.JwtResponseDTO;
 import authentication.model.RefreshAccessTokenRequestDTO;
 import authentication.model.UserInfoDTO;
@@ -47,14 +46,14 @@ public class AuthController
     }
 
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody AuthRequestDTO authRequestDTO){
-        if(!authService.loginUser(authRequestDTO)) {
+    public ResponseEntity login(@RequestBody UserInfoDTO userInfoDTO){
+        if(!authService.loginUser(userInfoDTO)) {
             return new ResponseEntity<>("Login failed!", HttpStatus.UNAUTHORIZED);
         }
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getUsername());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInfoDTO.getUsername());
         return new ResponseEntity<>(JwtResponseDTO.builder()
-                .accessToken(jwtService.generateToken(authRequestDTO.getUsername()))
+                .accessToken(jwtService.generateToken(userInfoDTO.getUsername()))
                 .token(refreshToken.getToken())
                 .build(), HttpStatus.OK);
     }

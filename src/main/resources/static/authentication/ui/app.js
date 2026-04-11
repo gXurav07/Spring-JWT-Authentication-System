@@ -17,6 +17,7 @@ const apiBaseUrl = resolveApiBaseUrl();
 
 const elements = {
     username: document.getElementById("username"),
+    email: document.getElementById("email"),
     password: document.getElementById("password"),
     refreshToken: document.getElementById("refresh-token"),
     tokenStatus: document.getElementById("token-status"),
@@ -37,7 +38,15 @@ const elements = {
     clearLogBtn: document.getElementById("clear-log-btn"),
 };
 
-function readCredentials() {
+function readSignupPayload() {
+    return {
+        username: elements.username.value.trim(),
+        email: elements.email.value.trim(),
+        password: elements.password.value,
+    };
+}
+
+function readLoginPayload() {
     return {
         username: elements.username.value.trim(),
         password: elements.password.value,
@@ -164,7 +173,7 @@ async function callApi(path, options = {}) {
 
 async function signup() {
     try {
-        const credentials = readCredentials();
+        const credentials = readSignupPayload();
         const payload = await callApi("/auth/v1/signup", {
             method: "POST",
             body: credentials,
@@ -180,7 +189,7 @@ async function signup() {
 
 async function login() {
     try {
-        const credentials = readCredentials();
+        const credentials = readLoginPayload();
         const payload = await callApi("/auth/v1/login", {
             method: "POST",
             body: credentials,
